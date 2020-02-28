@@ -2,3 +2,7 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:D:\workspace\yueyue\data.db
+server:
+  servlet:
+    session:
+      timeout: 24h
