@@ -41,7 +41,6 @@ public class ProductController {
     public ApiResponse<PageInfo<Map<String, Object>>> pagedQueryOnSaleProducts(@RequestParam(value = "name", required = false) String name,
                                                                                @RequestParam("pageIndex") int pageIndex, @RequestParam("pageSize") int pageSize) {
         return productService.pagedQueryOnSaleProducts(name, pageIndex, pageSize);
-
     }
 
     @GetMapping("selectMyProducts")
