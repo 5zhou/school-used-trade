@@ -8,6 +8,7 @@ import com.zouwu.trade.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -23,17 +24,17 @@ public class ProductController {
 
 
     @PostMapping("buy")
-    public ApiResponse<String> buy(@RequestParam("productId") int productId) {
+    public ApiResponse<Void> buy(@RequestParam("productId") int productId) {
         return productOrderService.buy(productId);
     }
 
     @PostMapping("insert")
-    public ApiResponse<String> insert(@RequestBody Product product) {
+    public ApiResponse<Void> insert(@RequestBody Product product) {
         return productService.insert(product);
     }
 
     @PostMapping("update")
-    public ApiResponse<String> update(@RequestBody Product product) {
+    public ApiResponse<Void> update(@RequestBody Product product) {
         return productService.update(product);
     }
 
@@ -54,12 +55,12 @@ public class ProductController {
     }
 
     @PostMapping("addComment")
-    public ApiResponse<String> addComment(@RequestParam("productId") int productId, @RequestParam("comment") String comment) {
+    public ApiResponse<Void> addComment(@RequestParam("productId") int productId, @RequestParam("comment") String comment) {
         return productService.addComment(productId, comment);
     }
 
     @PostMapping("delete")
-    public ApiResponse<String> delete(@RequestParam("productId") int productId) {
+    public ApiResponse<Void> delete(@RequestParam("productId") int productId) {
         return productService.delete(productId);
     }
 

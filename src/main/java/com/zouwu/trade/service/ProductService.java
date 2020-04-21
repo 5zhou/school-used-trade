@@ -29,19 +29,19 @@ public class ProductService {
     private ProductOrderMapper orderMapper;
 
 
-    public ApiResponse<String> insert(Product product) {
+    public ApiResponse<Void> insert(Product product) {
         product.setStatus(0);
         product.setUserId((Integer) request.getSession().getAttribute("id"));
         productMapper.insert(product);
-        return ApiResponse.defaultSuccessResponse();
+        return ApiResponse.success();
     }
 
-    public ApiResponse<String> update(Product product) {
+    public ApiResponse<Void> update(Product product) {
         if (product.getStatus() == 1) {
-            return ApiResponse.defaultFailResponse("已卖出的商品无法更新");
+            return ApiResponse.fail("已卖出的商品无法更新");
         }
         productMapper.updateByPrimaryKey(product);
-        return ApiResponse.defaultSuccessResponse();
+        return ApiResponse.success();
     }
 
 
@@ -65,27 +65,27 @@ public class ProductService {
         return new ApiResponse<>(0, "success", list);
     }
 
-    public ApiResponse<String> addComment(int productId, String comment) {
+    public ApiResponse<Void> addComment(int productId, String comment) {
         int userId = (int) request.getSession().getAttribute("id");
         ProductOrder order = orderMapper.selectByUserIdAndProductId(userId, productId);
         if (order == null) {
-            return ApiResponse.defaultFailResponse("你没有购买此商品，无法评价");
+            return ApiResponse.fail("你没有购买此商品，无法评价");
         }
         productMapper.addComment(productId, comment);
-        return ApiResponse.defaultSuccessResponse();
+        return ApiResponse.success();
     }
 
-    public ApiResponse<String> delete(int productId) {
+    public ApiResponse<Void> delete(int productId) {
         int userId = (int) request.getSession().getAttribute("id");
         Product product = productMapper.selectByPrimaryKey(productId);
         if (product != null && product.getUserId() != userId) {
-            return ApiResponse.defaultFailResponse("只能删除自己的商品");
+            return ApiResponse.fail("只能删除自己的商品");
         }
         if (product != null && product.getStatus() == 1) {
-            return ApiResponse.defaultFailResponse("已卖出的商品不能删除");
+            return ApiResponse.fail("已卖出的商品不能删除");
         }
         productMapper.deleteByPrimaryKey(productId);
-        return ApiResponse.defaultSuccessResponse();
+        return ApiResponse.success();
     }
 
 }

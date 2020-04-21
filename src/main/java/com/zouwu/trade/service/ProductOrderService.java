@@ -35,17 +35,17 @@ public class ProductOrderService {
     private UserMapper userMapper;
 
     @Transactional(rollbackFor = Exception.class)
-    public ApiResponse<String> buy(int productId) {
+    public ApiResponse<Void> buy(int productId) {
         Product product = productMapper.selectByPrimaryKey(productId);
         if (product == null) {
-            return ApiResponse.defaultFailResponse("商品不存在");
+            return ApiResponse.fail("商品不存在");
         }
         if (product.getStatus() != 0) {
-            return ApiResponse.defaultFailResponse("商品已下架或者已卖完");
+            return ApiResponse.fail("商品已下架或者已卖完");
         }
         int userId = (int) request.getSession().getAttribute("id");
         if (product.getUserId() == userId) {
-            return ApiResponse.defaultFailResponse("不能购买自己的商品");
+            return ApiResponse.fail("不能购买自己的商品");
         }
         ProductOrder order = new ProductOrder();
         order.setProductId(productId);
@@ -59,6 +59,6 @@ public class ProductOrderService {
         message.setUserId(product.getUserId());
         message.setContent(String.format("您的商品(%s), 已被同学(%s/%s)购买，购买者的联系方式如下，手机(%s)，邮箱(%s)，请尽快联系对方并线下完成交易。", product.getName(), user.getSchoolNo(), user.getName(), user.getPhone(), user.getMail()));
         messageMapper.insert(message);
-        return ApiResponse.defaultSuccessResponse();
+        return ApiResponse.success();
     }
 }

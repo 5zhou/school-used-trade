@@ -2,6 +2,7 @@ package com.zouwu.trade.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.zouwu.trade.aspect.OperationLog;
 import com.zouwu.trade.dto.ApiResponse;
 import com.zouwu.trade.model.User;
 import com.zouwu.trade.service.UserService;
@@ -31,6 +32,7 @@ public class UserController {
     }
 
     @PostMapping("login")
+    @OperationLog("lalala")
     public ApiResponse<User> login(@RequestParam("schoolNo") String schoolNo, @RequestParam("password") String password){
         return userService.login(schoolNo, password);
     }
@@ -54,13 +56,12 @@ public class UserController {
         List<Map<String, Object>> data = (List<Map<String, Object>>) map.get("data");
         List<String> dataList = new ArrayList<>();
         for (Map<String, Object> datum : data) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(datum.get("name")).append(",");
-            sb.append(datum.get("mobile_phone")).append(",");
-            sb.append(datum.get("mail")).append(",");
-            sb.append(datum.get("graduation_school")).append(",");
-            sb.append(datum.get("working_city"));
-            dataList.add(sb.toString());
+            String sb = datum.get("name") + "," +
+                    datum.get("mobile_phone") + "," +
+                    datum.get("mail") + "," +
+                    datum.get("graduation_school") + "," +
+                    datum.get("working_city");
+            dataList.add(sb);
         }
         Files.write(Paths.get("D:\\2.txt"), dataList);
 
